@@ -3,6 +3,7 @@
 #[macro_use]
 extern crate rocket;
 
+use rocket::State;
 use rocket_contrib::json::*;
 use serde::{Serialize,Deserialize};
 
@@ -27,26 +28,34 @@ struct Overview {
 }
 
 
-#[get("/")]
-fn index<'a> () -> Json<Overview> {
-    let all_sites : [SiteReference; 1] = [
-        SiteReference {
-            url: String::from("http://disney.com"),
-            display_name : String::from("Disney"),
-            required_roles : vec![String::from("disney")]
-        }
-    ];
+struct Context {
+        all_sites : Vec<SiteReference>
+}
 
+#[get("/")]
+fn index (ctx : State<Context>) -> Json<Overview> {
     Json(Overview {
         user_info : UserInfo {
             first_name : String::from("Mickey"),
             last_name : String::from("Mouse"),
             roles : vec![String::from("disney")],
         },
-        site_refs : vec![all_sites[0].clone()],
+        site_refs : vec![ctx.all_sites[0].clone()],
     })
 }
 
+
 fn main() {
-    rocket::ignite().mount("/base", routes![index]).launch();
+    let context : Context = Context{
+        all_sites : vec![SiteReference {
+            url: String::from("http://disney.com"),
+            display_name : String::from("Disney"),
+            required_roles : vec![String::from("disney")]
+        }]
+    };
+
+    rocket::ignite()
+    .manage(context)
+    .mount("/", routes![index])    
+    .launch();
 }
