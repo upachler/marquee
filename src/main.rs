@@ -1,10 +1,15 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
+extern crate serde;
+
 //#[macro_use]
 extern crate rocket;
 extern crate base64;
 
 extern crate jsonwebtoken as jwt;
+
+mod oidc;
+mod jwk;
 
 use hyper::header::Location;
 use rocket::outcome::IntoOutcome;
@@ -144,7 +149,7 @@ fn main() {
             "/exchange-token",
             Some((DO_LOGIN_PATH, vec!["roles".to_string()])),
         ))
-        .attach(rocket::fairing::AdHoc::on_response("Unauthorized redirector", |_req, res| {
+        .attach(rocket::fairing::AdHoc::on_response("Authentication Redirector", |_req, res| {
             if res.status() == Status::Unauthorized {
                 // FIXME: need to check if client is a browser (accepts HTML)
                 res.merge(Response::build().status(Status::SeeOther).header(Location("foo".to_owned())).finalize())
