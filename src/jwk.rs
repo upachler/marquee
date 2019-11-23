@@ -4,6 +4,7 @@ mod jwk {
     use serde::Deserialize;
 
     #[derive(Deserialize)]
+    #[allow(unused)]
     pub struct JWK {
         /// "kty" (Key Type) Parameter
         /// https://tools.ietf.org/html/draft-ietf-jose-json-web-key-41#section-4.1

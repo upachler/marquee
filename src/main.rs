@@ -109,7 +109,7 @@ fn token_callback(
 
     // Set a private cookie with the access token
     cookies.add_private(
-        Cookie::build("token", token.access_token)
+        Cookie::build("token", token.access_token().to_owned())
             .same_site(SameSite::Lax)
             .finish(),
     );
@@ -117,14 +117,7 @@ fn token_callback(
 }
 
 fn main() {
-    let oauth_provider = Provider {
-        auth_uri: Cow::from(
-            "http://localhost:8080/auth/realms/marquee/protocol/openid-connect/auth",
-        ),
-        token_uri: Cow::from(
-            "http://localhost:8080/auth/realms/marquee/protocol/openid-connect/token",
-        ),
-    };
+    let oauth_provider = oidc::OIDCIssuerProvider::new("http://localhost:8080/auth/realms/marquee");
     let oauth_config = OAuthConfig::new(
         oauth_provider,
         String::from("marquee"),
@@ -152,7 +145,7 @@ fn main() {
         .attach(rocket::fairing::AdHoc::on_response("Authentication Redirector", |_req, res| {
             if res.status() == Status::Unauthorized {
                 // FIXME: need to check if client is a browser (accepts HTML)
-                res.merge(Response::build().status(Status::SeeOther).header(Location("foo".to_owned())).finalize())
+                res.merge(Response::build().status(Status::SeeOther).header(Location(DO_LOGIN_PATH.to_owned())).finalize())
             }
         }
         ))

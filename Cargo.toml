@@ -11,7 +11,7 @@ rocket = "0.4.2"
 rocket_contrib = "0.4.2"
 serde = {version = "1.0.101", features = ["derive"] }
 serde_json = "1.0.40"
-rocket_oauth2  = "0.1.0"
+rocket_oauth2  = { git="https://github.com/jebrosen/rocket_oauth2.git", branch="master"}
 jsonwebtoken = "5"
 base64 = "0.10"
 reqwest = "0.9.21"
