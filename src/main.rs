@@ -18,6 +18,11 @@ fn index(ctx: auth::UserContext) -> String {
     msg
 }
 
+#[get("/token-exchange")]
+fn token_exchange() -> String{
+    String::from("this is the token exchange")
+}
+
 fn accepts_html(accept: &Accept) -> bool {
     accept.media_types().find(|media_type| **media_type==MediaType::HTML).is_some()
 }
@@ -52,7 +57,7 @@ fn unauthorized<'a>(req: &Request) -> Response<'a>{
 
 fn main() {
     rocket::ignite()
-    .mount("/", routes![index])
+    .mount("/", routes![index, token_exchange])
     .register(catchers![unauthorized])
     .launch();   
 }

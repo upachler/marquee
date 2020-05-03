@@ -13,7 +13,7 @@ pub fn mk_redirect_url() -> Result<Url,Box<dyn Error>> {
     // and token URL.
 
     let discovery_result = CoreProviderMetadata::discover(
-        &IssuerUrl::new("https://accounts.example.com".to_string())?,
+        &IssuerUrl::new("http://localhost:8080/auth/realms/acme".to_string())?,
         http_client,
     );
     let metadata = match discovery_result {
@@ -23,11 +23,12 @@ pub fn mk_redirect_url() -> Result<Url,Box<dyn Error>> {
     let client =
         CoreClient::from_provider_metadata(
             metadata,
-            ClientId::new("client_id".to_string()),
-            Some(ClientSecret::new("client_secret".to_string())),
+            ClientId::new("marquee".to_string()),
+//            Some(ClientSecret::new("client_secret".to_string())),
+            None
         )
         // Set the URL the user will be redirected to after the authorization process.
-        .set_redirect_uri(RedirectUrl::new("http://redirect".to_string())?);
+        .set_redirect_uri(RedirectUrl::new("http://localhost:8000/token-exchange".to_string())?);
     
     // Generate a PKCE challenge.
     let (pkce_challenge, pkce_verifier) = PkceCodeChallenge::new_random_sha256();
