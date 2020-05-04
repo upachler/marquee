@@ -6,7 +6,7 @@
 
 mod auth;
 
-use rocket::{Request,Response};
+use rocket::{Request,Response,State};
 use rocket::response::Responder;
 use rocket::{response::Redirect, http::{Accept,MediaType, Status}};
 
@@ -29,9 +29,10 @@ fn accepts_html(accept: &Accept) -> bool {
 
 #[catch(401)]
 fn unauthorized<'a>(req: &Request) -> Response<'a>{
+    let mut auth_manager = req.guard::<State<auth::AuthManager>>().unwrap();
     let redirect_to_uri = match req.accept() {
         Some(accept) => match accepts_html(accept) {
-            true => match auth::mk_redirect_url() {
+            true => match auth_manager.mk_login_url() {
                 Ok(uri) => Some(uri),
                 _ => None
             },
@@ -59,6 +60,7 @@ fn main() {
     rocket::ignite()
     .mount("/", routes![index, token_exchange])
     .register(catchers![unauthorized])
+    .manage(auth::AuthManager::default())
     .launch();   
 }
 

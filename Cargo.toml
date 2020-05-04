@@ -8,5 +8,5 @@ edition = "2018"
 
 [dependencies]
 rocket = {version="0.4.4", default-features=false}
-openidconnect = "1.0.0-alpha.13"
+openidconnect = {path = "../openidconnect-rs"} # "1.0.0-alpha.13"
 url = "2.1.1"

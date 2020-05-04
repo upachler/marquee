@@ -861,9 +861,7 @@ dependencies = [
 
 [[package]]
 name = "openidconnect"
-version = "1.0.0-alpha.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7d6688e904ae0a83081d534416ea5dc87d0ae60f572e8bda040aed00ad11ce5"
+version = "1.0.0-alpha.14"
 dependencies = [
  "base64 0.9.3",
  "chrono",
@@ -874,7 +872,6 @@ dependencies = [
  "log 0.4.8",
  "oauth2",
  "rand 0.6.5",
- "retry",
  "ring",
  "serde",
  "serde-value",
@@ -1265,15 +1262,6 @@ dependencies = [
  "url 1.7.2",
  "uuid",
  "winreg",
-]
-
-[[package]]
-name = "retry"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c8ac83b31b3831aa4b07608db4170f6555ab12942197037c38570dc4c5ba5028"
-dependencies = [
- "rand 0.6.5",
 ]
 
 [[package]]
