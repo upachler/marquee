@@ -685,6 +685,7 @@ dependencies = [
 name = "marquee"
 version = "0.1.0"
 dependencies = [
+ "failure",
  "openidconnect",
  "rocket",
  "url 2.1.1",
